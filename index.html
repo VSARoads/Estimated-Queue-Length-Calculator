@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGTTM Queue Length Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <meta name="theme-color" content="#2563eb">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <div class="max-w-md mx-auto w-full bg-white shadow-lg rounded-2xl my-4 p-6 flex-grow">
+        <h1 class="text-2xl font-bold text-center text-blue-600 mb-1">Queue Length Calculator</h1>
+        <p class="text-xs text-center text-slate-500 mb-6">Austroads Guide to Temporary Traffic Management (AGTTM)</p>
+
+        <!-- Result Card -->
+        <div class="bg-blue-600 text-white rounded-xl p-4 text-center mb-6 shadow-md">
+            <span class="block text-xs uppercase tracking-wider font-semibold opacity-90">Estimated Queue Length</span>
+            <div class="text-4xl font-extrabold mt-1"><span id="queueResult">0</span> <span class="text-xl font-normal">meters</span></div>
+        </div>
+
+        <!-- Stop Time Selector -->
+        <div class="mb-6">
+            <label class="block text-sm font-semibold mb-2 text-slate-700">Required Stop Time (Minutes)</label>
+            <div class="grid grid-cols-5 gap-2">
+                <button type="button" onclick="setStopTime(2)" class="stop-btn py-2 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="2">2 min</button>
+                <button type="button" onclick="setStopTime(5)" class="stop-btn py-2 text-sm font-medium rounded-lg border border-blue-600 bg-blue-600 text-white focus:outline-none" data-time="5">5 min</button>
+                <button type="button" onclick="setStopTime(10)" class="stop-btn py-2 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="10">10 min</button>
+                <button type="button" onclick="setStopTime(15)" class="stop-btn py-2 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="15">15 min</button>
+                <button type="button" onclick="setStopTime(30)" class="stop-btn py-2 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="30">30 min</button>
+            </div>
+        </div>
+
+        <!-- Average Vehicles Input -->
+        <div class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div class="flex justify-between items-center mb-2">
+                <label for="avgVehiclesNum" class="text-sm font-semibold text-slate-700">Average Vehicles (5 min)</label>
+                <input type="number" id="avgVehiclesNum" value="0" min="0" max="150" class="w-20 text-center font-bold text-lg bg-white border border-slate-300 rounded-lg py-1 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+            <input type="range" id="avgVehiclesSlider" min="0" max="150" value="0" class="w-full accent-blue-600 cursor-pointer">
+        </div>
+
+        <!-- Heavy/Oversized Vehicles Input -->
+        <div class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div class="flex justify-between items-center mb-2">
+                <label for="heavyVehiclesNum" class="text-sm font-semibold text-slate-700">Heavy / Oversized Vehicles (5 min)</label>
+                <input type="number" id="heavyVehiclesNum" value="0" min="0" max="50" class="w-20 text-center font-bold text-lg bg-white border border-slate-300 rounded-lg py-1 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+            <input type="range" id="heavyVehiclesSlider" min="0" max="50" value="0" class="w-full accent-blue-600 cursor-pointer">
+        </div>
+
+        <button onclick="resetForm()" class="w-full text-sm text-slate-500 hover:text-slate-700 font-medium py-2">Reset Calculator</button>
+    </div>
+
+    <footer class="text-center text-xs text-slate-400 py-4">
+        AGTTM Compliance Web App • Zero App Store Fees
+    </footer>
+
+    <script>
+        const multipliers = {
+            2:  { avg: 2.4, heavy: 8.0 },
+            5:  { avg: 6.0, heavy: 20.0 },
+            10: { avg: 12.0, heavy: 40.0 },
+            15: { avg: 18.0, heavy: 60.0 },
+            30: { avg: 36.0, heavy: 120.0 }
+        };
+
+        let currentStopTime = 5;
+
+        const avgNum = document.getElementById('avgVehiclesNum');
+        const avgSlider = document.getElementById('avgVehiclesSlider');
+        const heavyNum = document.getElementById('heavyVehiclesNum');
+        const heavySlider = document.getElementById('heavyVehiclesSlider');
+        const queueResult = document.getElementById('queueResult');
+        const stopBtns = document.querySelectorAll('.stop-btn');
+
+        function syncInputs(numEl, sliderEl) {
+            numEl.addEventListener('input', () => {
+                sliderEl.value = numEl.value;
+                calculateQueue();
+            });
+            sliderEl.addEventListener('input', () => {
+                numEl.value = sliderEl.value;
+                calculateQueue();
+            });
+        }
+
+        syncInputs(avgNum, avgSlider);
+        syncInputs(heavyNum, heavySlider);
+
+        function setStopTime(time) {
+            currentStopTime = time;
+            stopBtns.forEach(btn => {
+                if (parseInt(btn.dataset.time) === time) {
+                    btn.className = "stop-btn py-2 text-sm font-medium rounded-lg border border-blue-600 bg-blue-600 text-white focus:outline-none";
+                } else {
+                    btn.className = "stop-btn py-2 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none";
+                }
+            });
+            calculateQueue();
+        }
+
+        function calculateQueue() {
+            const avgCount = parseFloat(avgNum.value) || 0;
+            const heavyCount = parseFloat(heavyNum.value) || 0;
+            const m = multipliers[currentStopTime];
+
+            const totalLength = (avgCount * m.avg) + (heavyCount * m.heavy);
+            queueResult.innerText = totalLength.toFixed(1);
+        }
+
+        function resetForm() {
+            avgNum.value = 0;
+            avgSlider.value = 0;
+            heavyNum.value = 0;
+            heavySlider.value = 0;
+            setStopTime(5);
+        }
+
+        calculateQueue();
+    </script>
+</body>
+</html>
