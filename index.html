@@ -15,56 +15,58 @@
             appearance: none;
             background: transparent;
             cursor: pointer;
-            height: 28px; /* Larger touch target area */
+            height: 40px; /* Generous touch target area for field use */
         }
         input[type="range"]::-webkit-slider-runnable-track {
             background: #cbd5e1;
-            height: 6px;
-            border-radius: 3px;
+            height: 10px;
+            border-radius: 5px;
         }
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            margin-top: -5px;
+            margin-top: -7px;
             background-color: #000000;
-            height: 16px;
-            width: 16px;
+            height: 24px;
+            width: 24px;
             border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         input[type="range"]::-moz-range-track {
             background: #cbd5e1;
-            height: 6px;
-            border-radius: 3px;
+            height: 10px;
+            border-radius: 5px;
         }
         input[type="range"]::-moz-range-thumb {
             background-color: #000000;
-            height: 16px;
-            width: 16px;
+            height: 24px;
+            width: 24px;
             border-radius: 50%;
             border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
     </style>
 </head>
-<body style="background-color: #f7941e;" class="text-slate-800 min-h-screen flex flex-col justify-between">
+<body style="background-color: #f7941e;" class="text-slate-800 h-screen flex flex-col justify-between overflow-hidden">
 
-    <div class="max-w-md mx-auto w-full my-2 p-3 flex-grow flex flex-col justify-between">
+    <div class="max-w-md mx-auto w-full px-3 py-1 flex-grow flex flex-col justify-between">
         <div>
-            <!-- Header with Top Left Logo & Title -->
-            <div class="flex items-center justify-between mb-2">
-                <img src="VSA_Orange_Logo.png" alt="VSA Logo" class="h-10 w-auto rounded object-contain">
+            <!-- Header with Larger Top Left Logo & Title -->
+            <div class="flex items-center justify-between mb-1.5">
+                <img src="VSA_Orange_Logo.png" alt="VSA Logo" class="h-16 w-auto rounded object-contain">
                 <div class="text-right">
-                    <h1 class="text-xl font-bold text-[#000000] leading-tight">Queue Length Calculator</h1>
+                    <h1 class="text-lg font-bold text-[#000000] leading-tight">Queue Length Calculator</h1>
                 </div>
             </div>
 
             <!-- Result Card -->
-            <div class="bg-[#000000] text-white rounded-xl p-3 text-center mb-2 shadow-md">
+            <div class="bg-[#000000] text-white rounded-xl p-2.5 text-center mb-2 shadow-md">
                 <span class="block text-[10px] uppercase tracking-wider font-semibold opacity-90">Estimated Queue Length</span>
-                <div class="text-3xl font-extrabold mt-0.5"><span id="queueResult">0</span> <span class="text-lg font-normal">meters</span></div>
+                <div class="text-3xl font-extrabold mt-0.5"><span id="queueResult">0</span> <span class="text-base font-normal">meters</span></div>
             </div>
 
             <!-- VPH Sub Box & Save Button Row -->
-            <div class="grid grid-cols-2 gap-2 mb-3">
+            <div class="grid grid-cols-2 gap-2 mb-2.5">
                 <div class="bg-white rounded-xl p-2 px-3 text-center shadow-sm border border-slate-200 flex flex-col justify-center">
                     <span class="text-[10px] uppercase tracking-wider font-bold text-slate-600">Traffic Volume</span>
                     <div class="text-base font-extrabold text-[#000000]"><span id="vphResult">0</span> <span class="text-[10px] font-normal text-slate-500">VPH</span></div>
@@ -75,8 +77,8 @@
             </div>
 
             <!-- Stop Time Selector -->
-            <div class="bg-white p-3 rounded-xl border border-slate-200 mb-3 shadow-sm">
-                <label class="block text-xs font-semibold mb-1.5 text-slate-700">Required Stop Time (Minutes)</label>
+            <div class="bg-white p-2.5 rounded-xl border border-slate-200 mb-2.5 shadow-sm">
+                <label class="block text-xs font-semibold mb-1 text-slate-700">Required Stop Time (Minutes)</label>
                 <div class="grid grid-cols-5 gap-1.5">
                     <button type="button" onclick="setStopTime(2)" class="stop-btn py-1.5 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="2">2m</button>
                     <button type="button" onclick="setStopTime(5)" class="stop-btn py-1.5 text-xs font-medium rounded-lg border border-[#000000] bg-[#000000] text-white focus:outline-none" data-time="5">5m</button>
@@ -87,8 +89,8 @@
             </div>
 
             <!-- Average Vehicles Input -->
-            <div class="mb-2.5 bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
-                <div class="flex justify-between items-center mb-1">
+            <div class="mb-2 bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex justify-between items-center mb-0.5">
                     <label for="avgVehiclesNum" class="text-xs font-semibold text-slate-700">Average Vehicles (5 min)</label>
                     <input type="number" id="avgVehiclesNum" value="0" min="0" max="150" class="w-16 text-center font-bold text-base bg-slate-50 border border-slate-300 rounded-lg py-0.5 focus:ring-2 focus:ring-[#000000] focus:outline-none">
                 </div>
@@ -96,8 +98,8 @@
             </div>
 
             <!-- Heavy/Oversized Vehicles Input -->
-            <div class="mb-3 bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
-                <div class="flex justify-between items-center mb-1">
+            <div class="mb-2 bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex justify-between items-center mb-0.5">
                     <label for="heavyVehiclesNum" class="text-xs font-semibold text-slate-700">Heavy / Oversized (5 min)</label>
                     <input type="number" id="heavyVehiclesNum" value="0" min="0" max="50" class="w-16 text-center font-bold text-base bg-slate-50 border border-slate-300 rounded-lg py-0.5 focus:ring-2 focus:ring-[#000000] focus:outline-none">
                 </div>
@@ -105,24 +107,24 @@
             </div>
 
             <!-- Saved Calculations Container -->
-            <div id="savedSection" class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm mb-3 hidden">
-                <div class="flex justify-between items-center mb-1.5">
+            <div id="savedSection" class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm mb-2 hidden">
+                <div class="flex justify-between items-center mb-1">
                     <span class="text-xs font-bold text-slate-700">Saved Measurements (<span id="savedCount">0</span>)</span>
                     <button onclick="clearSaved()" class="text-[10px] text-red-600 hover:text-red-800 font-semibold uppercase">Clear All</button>
                 </div>
-                <div id="savedList" class="max-h-24 overflow-y-auto space-y-1.5 text-xs">
+                <div id="savedList" class="max-h-20 overflow-y-auto space-y-1 text-xs">
                     <!-- Populated dynamically -->
                 </div>
             </div>
         </div>
 
         <!-- Footer & Reset -->
-        <div class="flex gap-2 items-center mt-1">
-            <button onclick="resetForm()" class="w-full text-xs text-black font-bold py-2 bg-white/40 hover:bg-white/60 rounded-xl transition">Reset Calculator</button>
+        <div class="flex gap-2 items-center pb-1">
+            <button onclick="resetForm()" class="w-full text-xs text-black font-bold py-1.5 bg-white/40 hover:bg-white/60 rounded-xl transition">Reset Calculator</button>
         </div>
     </div>
 
-    <footer class="text-center text-[10px] text-black font-semibold py-2 opacity-90">
+    <footer class="text-center text-[10px] text-black font-semibold py-1.5 opacity-90">
         AGTTM Compliance Web App • Developed for VSA Roads
     </footer>
 
@@ -225,13 +227,13 @@
             let html = '';
             savedCalculations.forEach((item, index) => {
                 html += `
-                    <div class="flex justify-between items-center bg-slate-50 p-1.5 rounded border border-slate-200">
+                    <div class="flex justify-between items-center bg-slate-50 p-1 rounded border border-slate-200">
                         <div>
                             <span class="font-bold text-slate-800">#${index + 1} (${item.stopTime}m):</span> 
                             <span class="text-slate-600">${item.avg} avg, ${item.heavy} hvy</span>
                         </div>
                         <div class="font-extrabold text-black">
-                            ${item.queue}m <span class="text-[10px] font-normal text-slate-500">(${item.vph} VPH)</span>
+                            ${item.queue}m <span class="text-[9px] font-normal text-slate-500">(${item.vph} VPH)</span>
                         </div>
                     </div>
                 `;
