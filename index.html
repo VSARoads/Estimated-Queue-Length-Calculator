@@ -63,7 +63,13 @@
                 width: 100%;
                 background: white !important;
                 color: black !important;
-                padding: 20px;
+                padding: 15px;
+                margin: 0;
+            }
+            body, html {
+                background: white !important;
+                height: auto !important;
+                overflow: visible !important;
             }
         }
     </style>
@@ -176,11 +182,11 @@
     <!-- Printable Report Template for PDF Export -->
     <div id="printableReport">
         <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">VSA Roads - EQL Audit Report</h2>
-        <p style="font-size: 11px; color: #666; margin-bottom: 15px;">Generated via AGTTM Queue Length Calculator</p>
+        <p style="font-size: 11px; color: #666; margin-bottom: 15px;">Report Generated: <span id="reportTimestamp"></span></p>
         <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
             <thead>
                 <tr style="background: #f1f5f9; border-bottom: 1px solid #cbd5e1;">
-                    <th style="padding: 6px; text-align: left;">Title / Location</th>
+                    <th style="padding: 6px; text-align: left;">Title / Time / Location</th>
                     <th style="padding: 6px; text-align: center;">Stop Time</th>
                     <th style="padding: 6px; text-align: center;">Avg / Hvy</th>
                     <th style="padding: 6px; text-align: center;">Volume</th>
@@ -204,6 +210,7 @@
         let currentStopTime = 5;
         let savedCalculations = [];
         let currentGPS = null;
+        let currentGPSCoordsText = null;
         let timerInterval = null;
         let timeLeft = 300;
         let timerRunning = false;
@@ -356,6 +363,7 @@
                     const lat = position.coords.latitude.toFixed(5);
                     const lon = position.coords.longitude.toFixed(5);
                     currentGPS = `https://maps.google.com/?q=${lat},${lon}`;
+                    currentGPSCoordsText = `${lat}, ${lon}`;
                     statusEl.innerText = "Linked ✓";
                     btnEl.classList.add('border-green-500', 'bg-green-50');
                 },
@@ -374,6 +382,10 @@
             const queue = queueResult.innerText;
             const vph = vphResult.innerText;
             const gps = currentGPS;
+            const gpsCoords = currentGPSCoordsText;
+            
+            const now = new Date();
+            const timestamp = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' ' + now.toLocaleDateString();
             const defaultTitle = `Measurement #${savedCalculations.length + 1}`;
 
             savedCalculations.push({
@@ -383,7 +395,9 @@
                 heavy,
                 queue,
                 vph,
-                gps
+                gps,
+                gpsCoords,
+                timestamp
             });
 
             updateSavedUI();
@@ -419,7 +433,7 @@
                     <div class="flex justify-between items-center bg-slate-50 p-1 rounded border border-slate-200">
                         <div class="flex items-center gap-1 flex-grow mr-2">
                             <input type="text" value="${item.title}" oninput="updateMeasurementTitle(${index}, this.value)" class="meas-title-input bg-white border border-slate-300 rounded px-1 py-0.5 text-xs font-bold text-slate-800 w-28 focus:outline-none focus:ring-1 focus:ring-black">
-                            <span class="text-[10px] text-slate-500">(${item.stopTime}m)</span>
+                            <span class="text-[9px] text-slate-500">${item.timestamp}</span>
                         </div>
                         <div class="flex items-center gap-2 text-right">
                             <span class="text-[10px] text-slate-600">${item.avg}a, ${item.heavy}h</span>
@@ -442,17 +456,23 @@
                 }
             });
 
+            document.getElementById('reportTimestamp').innerText = new Date().toLocaleString();
+
             const tbody = document.getElementById('printTableBody');
             let rows = '';
             savedCalculations.forEach(item => {
-                let mapText = item.gps ? `<br><a href="${item.gps}">GPS Location</a>` : '';
+                let mapText = item.gps ? `<br><a href="${item.gps}" style="color: #2563eb; text-decoration: underline;">GPS: ${item.gpsCoords}</a>` : '<br><span style="color: #64748b;">GPS: Not Linked</span>';
                 rows += `
                     <tr style="border-bottom: 1px solid #e2e8f0;">
-                        <td style="padding: 6px; font-weight: bold;">${item.title}${mapText}</td>
-                        <td style="padding: 6px; text-align: center;">${item.stopTime} mins</td>
-                        <td style="padding: 6px; text-align: center;">${item.avg} avg / ${item.heavy} hvy</td>
-                        <td style="padding: 6px; text-align: center;">${item.vph} VPH</td>
-                        <td style="padding: 6px; text-align: right; font-weight: bold;">${item.queue} meters</td>
+                        <td style="padding: 8px 6px; font-weight: bold;">
+                            ${item.title}
+                            <div style="font-weight: normal; font-size: 10px; color: #475569; margin-top: 2px;">Recorded: ${item.timestamp}</div>
+                            ${mapText}
+                        </td>
+                        <td style="padding: 8px 6px; text-align: center; vertical-align: top;">${item.stopTime} mins</td>
+                        <td style="padding: 8px 6px; text-align: center; vertical-align: top;">${item.avg} avg / ${item.heavy} hvy</td>
+                        <td style="padding: 8px 6px; text-align: center; vertical-align: top;">${item.vph} VPH</td>
+                        <td style="padding: 8px 6px; text-align: right; vertical-align: top; font-weight: bold;">${item.queue} meters</td>
                     </tr>
                 `;
             });
@@ -468,6 +488,7 @@
             setStopTime(5);
             resetTimer();
             currentGPS = null;
+            currentGPSCoordsText = null;
             document.getElementById('gpsStatus').innerText = "Not Set";
             document.getElementById('gpsBtn').classList.remove('border-green-500', 'bg-green-50');
             calculateQueue();
