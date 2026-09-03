@@ -45,6 +45,9 @@
             border: none;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
+        #printableReport {
+            display: none;
+        }
         @media print {
             body * {
                 visibility: hidden;
@@ -53,6 +56,7 @@
                 visibility: visible;
             }
             #printableReport {
+                display: block !important;
                 position: absolute;
                 left: 0;
                 top: 0;
@@ -169,8 +173,8 @@
         AGTTM Compliance Web App • Developed for VSA Roads
     </footer>
 
-    <!-- Hidden Printable Report Template for PDF Export -->
-    <div id="printableReport" class="hidden">
+    <!-- Printable Report Template for PDF Export -->
+    <div id="printableReport">
         <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">VSA Roads - EQL Audit Report</h2>
         <p style="font-size: 11px; color: #666; margin-bottom: 15px;">Generated via AGTTM Queue Length Calculator</p>
         <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
@@ -201,7 +205,7 @@
         let savedCalculations = [];
         let currentGPS = null;
         let timerInterval = null;
-        let timeLeft = 300; // 5 minutes in seconds
+        let timeLeft = 300;
         let timerRunning = false;
 
         const avgNum = document.getElementById('avgVehiclesNum');
@@ -271,7 +275,6 @@
             vphResult.innerText = vph;
         }
 
-        // Timer Functions
         function toggleTimer() {
             if (!timerRunning) {
                 startTimer();
@@ -329,7 +332,7 @@
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, ctx.currentTime); // A5 note
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
                 gain.gain.setValueAtTime(0.2, ctx.currentTime);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
@@ -340,7 +343,6 @@
             }
         }
 
-        // GPS Function
         function getGPSLocation() {
             const statusEl = document.getElementById('gpsStatus');
             const btnEl = document.getElementById('gpsBtn');
@@ -416,7 +418,7 @@
                 html += `
                     <div class="flex justify-between items-center bg-slate-50 p-1 rounded border border-slate-200">
                         <div class="flex items-center gap-1 flex-grow mr-2">
-                            <input type="text" value="${item.title}" onchange="updateMeasurementTitle(${index}, this.value)" class="bg-white border border-slate-300 rounded px-1 py-0.5 text-xs font-bold text-slate-800 w-28 focus:outline-none focus:ring-1 focus:ring-black">
+                            <input type="text" value="${item.title}" oninput="updateMeasurementTitle(${index}, this.value)" class="meas-title-input bg-white border border-slate-300 rounded px-1 py-0.5 text-xs font-bold text-slate-800 w-28 focus:outline-none focus:ring-1 focus:ring-black">
                             <span class="text-[10px] text-slate-500">(${item.stopTime}m)</span>
                         </div>
                         <div class="flex items-center gap-2 text-right">
@@ -431,6 +433,15 @@
 
         function exportToPDF() {
             if (savedCalculations.length === 0) return;
+            
+            // Sync any currently typed input values before generating report
+            const titleInputs = document.querySelectorAll('.meas-title-input');
+            titleInputs.forEach((input, index) => {
+                if (savedCalculations[index]) {
+                    savedCalculations[index].title = input.value;
+                }
+            });
+
             const tbody = document.getElementById('printTableBody');
             let rows = '';
             savedCalculations.forEach(item => {
