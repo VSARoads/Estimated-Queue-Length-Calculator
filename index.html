@@ -98,11 +98,11 @@
                     <span class="text-[9px] uppercase tracking-wider font-bold text-slate-600">Volume</span>
                     <div class="text-xs font-extrabold text-[#000000]"><span id="vphResult">0</span> <span class="text-[9px] font-normal text-slate-500">VPH</span></div>
                 </div>
-                <button onclick="getGPSLocation()" id="gpsBtn" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold text-[10px] py-1.5 px-2 rounded-xl shadow-sm transition flex flex-col items-center justify-center">
+                <button onclick="getGPSLocation()" id="gpsBtn" class="touch-manipulation bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold text-[10px] py-1.5 px-2 rounded-xl shadow-sm transition flex flex-col items-center justify-center">
                     <span>📍 GPS Link</span>
                     <span id="gpsStatus" class="text-[8px] font-normal text-slate-400 truncate max-w-[90px]">Not Set</span>
                 </button>
-                <button onclick="saveCalculation()" class="bg-[#000000] hover:bg-slate-800 text-white font-bold text-[10px] py-1.5 px-2 rounded-xl shadow-sm transition flex items-center justify-center">
+                <button onclick="saveCalculation()" class="touch-manipulation bg-[#000000] hover:bg-slate-800 text-white font-bold text-[10px] py-1.5 px-2 rounded-xl shadow-sm transition flex items-center justify-center">
                     + Save
                 </button>
             </div>
@@ -111,16 +111,16 @@
             <div class="bg-white p-2 rounded-xl border border-slate-200 mb-1.5 shadow-sm">
                 <label class="block text-[10px] font-semibold mb-1 text-slate-700">Required Stop Time (Minutes)</label>
                 <div class="grid grid-cols-5 gap-1">
-                    <button type="button" onclick="setStopTime(2)" class="stop-btn py-1 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="2">2m</button>
-                    <button type="button" onclick="setStopTime(5)" class="stop-btn py-1 text-xs font-medium rounded-lg border border-[#000000] bg-[#000000] text-white focus:outline-none" data-time="5">5m</button>
-                    <button type="button" onclick="setStopTime(10)" class="stop-btn py-1 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="10">10m</button>
-                    <button type="button" onclick="setStopTime(15)" class="stop-btn py-1 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="15">15m</button>
-                    <button type="button" onclick="setStopTime(30)" class="stop-btn py-1 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="30">30m</button>
+                    <button type="button" onclick="setStopTime(2)" class="touch-manipulation stop-btn py-1 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="2">2m</button>
+                    <button type="button" onclick="setStopTime(5)" class="touch-manipulation stop-btn py-1 text-xs font-medium rounded-lg border border-[#000000] bg-[#000000] text-white focus:outline-none" data-time="5">5m</button>
+                    <button type="button" onclick="setStopTime(10)" class="touch-manipulation stop-btn py-1 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="10">10m</button>
+                    <button type="button" onclick="setStopTime(15)" class="touch-manipulation stop-btn py-1 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="15">15m</button>
+                    <button type="button" onclick="setStopTime(30)" class="touch-manipulation stop-btn py-1 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none" data-time="30">30m</button>
                 </div>
             </div>
 
             <!-- 5-Minute Timer Bar -->
-            <div id="timerCard" onclick="toggleTimer()" class="bg-white p-2 rounded-xl border border-slate-200 mb-1.5 shadow-sm flex justify-between items-center cursor-pointer transition select-none">
+            <div id="timerCard" onclick="toggleTimer()" class="touch-manipulation bg-white p-2 rounded-xl border border-slate-200 mb-1.5 shadow-sm flex justify-between items-center cursor-pointer transition select-none">
                 <div class="flex items-center gap-2">
                     <span class="text-sm">⏱️</span>
                     <span class="text-[11px] font-bold text-slate-700" id="timerLabel">Tap to Start 5-Min Count Timer</span>
@@ -132,10 +132,10 @@
             <div class="mb-1.5 bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
                 <div class="flex justify-between items-center mb-0.5">
                     <label for="avgVehiclesNum" class="text-[11px] font-semibold text-slate-700">Average Vehicles (5 min)</label>
-                    <div class="flex items-center gap-1">
-                        <button type="button" onclick="adjustCount('avg', -1)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg font-bold text-sm flex items-center justify-center text-slate-700 active:scale-95">-</button>
-                        <input type="number" id="avgVehiclesNum" value="0" min="0" class="w-14 text-center font-bold text-sm bg-slate-50 border border-slate-300 rounded-lg py-0.5 focus:ring-2 focus:ring-[#000000] focus:outline-none">
-                        <button type="button" onclick="adjustCount('avg', 1)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg font-bold text-sm flex items-center justify-center text-slate-700 active:scale-95">+</button>
+                    <div class="flex items-center gap-1.5">
+                        <button type="button" onclick="adjustCount('avg', -1)" class="touch-manipulation w-10 h-10 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-xl font-bold text-lg flex items-center justify-center text-slate-700 active:scale-95 select-none">-</button>
+                        <input type="number" id="avgVehiclesNum" value="0" min="0" class="w-14 text-center font-bold text-sm bg-slate-50 border border-slate-300 rounded-lg py-1.5 focus:ring-2 focus:ring-[#000000] focus:outline-none">
+                        <button type="button" onclick="adjustCount('avg', 1)" class="touch-manipulation w-10 h-10 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-xl font-bold text-lg flex items-center justify-center text-slate-700 active:scale-95 select-none">+</button>
                     </div>
                 </div>
                 <input type="range" id="avgVehiclesSlider" min="0" max="150" value="0" class="w-full">
@@ -145,10 +145,10 @@
             <div class="mb-1.5 bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
                 <div class="flex justify-between items-center mb-0.5">
                     <label for="heavyVehiclesNum" class="text-[11px] font-semibold text-slate-700">Heavy / Oversized (5 min)</label>
-                    <div class="flex items-center gap-1">
-                        <button type="button" onclick="adjustCount('heavy', -1)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg font-bold text-sm flex items-center justify-center text-slate-700 active:scale-95">-</button>
-                        <input type="number" id="heavyVehiclesNum" value="0" min="0" class="w-14 text-center font-bold text-sm bg-slate-50 border border-slate-300 rounded-lg py-0.5 focus:ring-2 focus:ring-[#000000] focus:outline-none">
-                        <button type="button" onclick="adjustCount('heavy', 1)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg font-bold text-sm flex items-center justify-center text-slate-700 active:scale-95">+</button>
+                    <div class="flex items-center gap-1.5">
+                        <button type="button" onclick="adjustCount('heavy', -1)" class="touch-manipulation w-10 h-10 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-xl font-bold text-lg flex items-center justify-center text-slate-700 active:scale-95 select-none">-</button>
+                        <input type="number" id="heavyVehiclesNum" value="0" min="0" class="w-14 text-center font-bold text-sm bg-slate-50 border border-slate-300 rounded-lg py-1.5 focus:ring-2 focus:ring-[#000000] focus:outline-none">
+                        <button type="button" onclick="adjustCount('heavy', 1)" class="touch-manipulation w-10 h-10 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-xl font-bold text-lg flex items-center justify-center text-slate-700 active:scale-95 select-none">+</button>
                     </div>
                 </div>
                 <input type="range" id="heavyVehiclesSlider" min="0" max="50" value="0" class="w-full">
@@ -159,8 +159,8 @@
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-[11px] font-bold text-slate-700">Saved Measurements (<span id="savedCount">0</span>)</span>
                     <div class="flex gap-2">
-                        <button onclick="exportToPDF()" class="text-[10px] text-blue-600 hover:text-blue-800 font-semibold uppercase">Export PDF</button>
-                        <button onclick="clearSaved()" class="text-[10px] text-red-600 hover:text-red-800 font-semibold uppercase">Clear All</button>
+                        <button onclick="exportToPDF()" class="touch-manipulation text-[10px] text-blue-600 hover:text-blue-800 font-semibold uppercase">Export PDF</button>
+                        <button onclick="clearSaved()" class="touch-manipulation text-[10px] text-red-600 hover:text-red-800 font-semibold uppercase">Clear All</button>
                     </div>
                 </div>
                 <div id="savedList" class="max-h-36 overflow-y-auto space-y-1 text-xs">
@@ -171,7 +171,7 @@
 
         <!-- Footer & Reset -->
         <div class="flex gap-2 items-center pb-1">
-            <button onclick="resetForm()" class="w-full text-xs text-black font-bold py-1.5 bg-white/40 hover:bg-white/60 rounded-xl transition">Reset Calculator</button>
+            <button onclick="resetForm()" class="touch-manipulation w-full text-xs text-black font-bold py-1.5 bg-white/40 hover:bg-white/60 rounded-xl transition">Reset Calculator</button>
         </div>
     </div>
 
@@ -258,9 +258,9 @@
             currentStopTime = time;
             stopBtns.forEach(btn => {
                 if (parseInt(btn.dataset.time) === time) {
-                    btn.className = "stop-btn py-1 text-xs font-medium rounded-lg border border-[#000000] bg-[#000000] text-white focus:outline-none";
+                    btn.className = "touch-manipulation stop-btn py-1 text-xs font-medium rounded-lg border border-[#000000] bg-[#000000] text-white focus:outline-none";
                 } else {
-                    btn.className = "stop-btn py-1 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none";
+                    btn.className = "touch-manipulation stop-btn py-1 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:outline-none";
                 }
             });
             calculateQueue();
@@ -457,7 +457,7 @@
 
             const tbody = document.getElementById('printTableBody');
             let rows = '';
-            savedCalculations.format = savedCalculations.forEach(item => {
+            savedCalculations.forEach(item => {
                 let mapText = item.gps ? `<br><a href="${item.gps}" style="color: #2563eb; text-decoration: underline;">GPS: ${item.gpsCoords}</a>` : '<br><span style="color: #64748b;">GPS: Not Linked</span>';
                 rows += `
                     <tr style="border-bottom: 1px solid #e2e8f0;">
