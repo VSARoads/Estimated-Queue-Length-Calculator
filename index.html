@@ -134,7 +134,7 @@
                     <label for="avgVehiclesNum" class="text-[11px] font-semibold text-slate-700">Average Vehicles (5 min)</label>
                     <div class="flex items-center gap-1">
                         <button type="button" onclick="adjustCount('avg', -1)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg font-bold text-sm flex items-center justify-center text-slate-700 active:scale-95">-</button>
-                        <input type="number" id="avgVehiclesNum" value="0" min="0" max="150" class="w-14 text-center font-bold text-sm bg-slate-50 border border-slate-300 rounded-lg py-0.5 focus:ring-2 focus:ring-[#000000] focus:outline-none">
+                        <input type="number" id="avgVehiclesNum" value="0" min="0" class="w-14 text-center font-bold text-sm bg-slate-50 border border-slate-300 rounded-lg py-0.5 focus:ring-2 focus:ring-[#000000] focus:outline-none">
                         <button type="button" onclick="adjustCount('avg', 1)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg font-bold text-sm flex items-center justify-center text-slate-700 active:scale-95">+</button>
                     </div>
                 </div>
@@ -147,7 +147,7 @@
                     <label for="heavyVehiclesNum" class="text-[11px] font-semibold text-slate-700">Heavy / Oversized (5 min)</label>
                     <div class="flex items-center gap-1">
                         <button type="button" onclick="adjustCount('heavy', -1)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg font-bold text-sm flex items-center justify-center text-slate-700 active:scale-95">-</button>
-                        <input type="number" id="heavyVehiclesNum" value="0" min="0" max="50" class="w-14 text-center font-bold text-sm bg-slate-50 border border-slate-300 rounded-lg py-0.5 focus:ring-2 focus:ring-[#000000] focus:outline-none">
+                        <input type="number" id="heavyVehiclesNum" value="0" min="0" class="w-14 text-center font-bold text-sm bg-slate-50 border border-slate-300 rounded-lg py-0.5 focus:ring-2 focus:ring-[#000000] focus:outline-none">
                         <button type="button" onclick="adjustCount('heavy', 1)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg font-bold text-sm flex items-center justify-center text-slate-700 active:scale-95">+</button>
                     </div>
                 </div>
@@ -163,7 +163,7 @@
                         <button onclick="clearSaved()" class="text-[10px] text-red-600 hover:text-red-800 font-semibold uppercase">Clear All</button>
                     </div>
                 </div>
-                <div id="savedList" class="max-h-16 overflow-y-auto space-y-1 text-xs">
+                <div id="savedList" class="max-h-36 overflow-y-auto space-y-1 text-xs">
                     <!-- Populated dynamically -->
                 </div>
             </div>
@@ -226,9 +226,10 @@
         const timerDisplay = document.getElementById('timerDisplay');
         const timerLabel = document.getElementById('timerLabel');
 
-        function syncInputs(numEl, sliderEl) {
+        function syncInputs(numEl, sliderEl, maxSliderVal) {
             numEl.addEventListener('input', () => {
-                sliderEl.value = numEl.value;
+                const val = parseInt(numEl.value) || 0;
+                sliderEl.value = Math.min(val, maxSliderVal);
                 calculateQueue();
             });
             sliderEl.addEventListener('input', () => {
@@ -237,22 +238,18 @@
             });
         }
 
-        syncInputs(avgNum, avgSlider);
-        syncInputs(heavyNum, heavySlider);
+        syncInputs(avgNum, avgSlider, 150);
+        syncInputs(heavyNum, heavySlider, 50);
 
         function adjustCount(type, delta) {
             if (type === 'avg') {
                 let val = Math.max(0, parseInt(avgNum.value || 0) + delta);
-                if (val <= 150) {
-                    avgNum.value = val;
-                    avgSlider.value = val;
-                }
+                avgNum.value = val;
+                avgSlider.value = Math.min(val, 150);
             } else if (type === 'heavy') {
                 let val = Math.max(0, parseInt(heavyNum.value || 0) + delta);
-                if (val <= 50) {
-                    heavyNum.value = val;
-                    heavySlider.value = val;
-                }
+                heavyNum.value = val;
+                heavySlider.value = Math.min(val, 50);
             }
             calculateQueue();
         }
@@ -460,7 +457,7 @@
 
             const tbody = document.getElementById('printTableBody');
             let rows = '';
-            savedCalculations.forEach(item => {
+            savedCalculations.format = savedCalculations.forEach(item => {
                 let mapText = item.gps ? `<br><a href="${item.gps}" style="color: #2563eb; text-decoration: underline;">GPS: ${item.gpsCoords}</a>` : '<br><span style="color: #64748b;">GPS: Not Linked</span>';
                 rows += `
                     <tr style="border-bottom: 1px solid #e2e8f0;">
